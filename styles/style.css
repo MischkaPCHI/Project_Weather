@@ -15,7 +15,7 @@ main {
     align-items: center;
     overflow: auto;
 }
-@media screen and (min-width: 600px) {
+/* @media screen and (min-width: 600px) {
     body, html {
         margin: 0;
         padding: 0;
@@ -35,11 +35,11 @@ main {
         /* justify-content: space-between; */
         /* align-items: center; */
     }
-}
+} */
 .bulk-info {
     margin-top: 50px; /* Отступ сверху */
 }
-.main-date, .location, .weather-description {
+.main-date, .location, .weather-description , #date{
     text-align:center; 
 }
 #main-img {
@@ -85,8 +85,3 @@ button {
     background-size: cover;
     margin: 0 10px;
 }
-
-#date {
-    text-align: center;
-}
-
