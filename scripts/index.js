@@ -103,7 +103,7 @@ const weather = (weather) => {
 }
 
 const temp = (temp) => {
-    tempInfo.textContent = temp.current.temp_c;
+    tempInfo.textContent = temp.current.temp_c + '°C';
 }
 
 const icon = (icon) => {
