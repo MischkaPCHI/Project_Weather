@@ -113,17 +113,17 @@ const icon = (icon) => {
 const date = () => {
 
     const months = [
-        'Januar',
-        'Februar',
+        'January',
+        'February',
         'March',
         'April',
-        'Mai',
-        'Juni',
-        'Juli',
+        'May',
+        'June',
+        'July',
         'August',
         'September',
         'November',
-        'Dezember',
+        'December',
     ]
 
     const dayDate = new Date().getDay();
