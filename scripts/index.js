@@ -29,6 +29,7 @@ const searchButtonHandler = (event) => {
     cityInput.textContent = cityID;
     serverWork();
     forecast.innerHTML = '';
+    actualInfo.removeEventListener('click', revealDetailsHandler);
     }
 }
 
@@ -180,3 +181,15 @@ const date = () => {
 
 cityInput.addEventListener('input', inputField);
 searchButton.addEventListener("click", searchButtonHandler);
+cityInput.addEventListener('focus', () => {
+    cityInput.value = '';
+    cityID = '';
+    forecast.innerHTML = '';
+    
+    const existingAdditionalInfo = document.querySelector('.add-info');
+    if (existingAdditionalInfo) {
+        existingAdditionalInfo.remove();
+    }
+    
+    actualInfo.addEventListener('click', revealDetailsHandler);
+});
