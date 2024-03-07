@@ -10,8 +10,12 @@ const weatherDescription = document.querySelector('.weather-description');
 const tempInfo = document.querySelector('.temperature');
 const forecast = document.querySelector('.future-info')
 const nextDays = document.querySelector('.future-weather');
+const glowBox = document.querySelector('.glow-box');
+const main = document.querySelector('main');
+const glow = Object.assign(document.createElement('div'), { className: 'glow' });
 
 let cityID;
+let revealDetailsHandler;
 
 const inputField = (event) => {
     cityID = event.target.value;
@@ -38,6 +42,18 @@ const serverWork = async () => {
     temp(body);
     icon(body);
     date();
+    console.log(body);
+
+    let actualTime = new Date(body.location.localtime).getHours();
+    console.log(actualTime);
+
+    if (actualTime >= 18 && actualTime > 6) {
+        main.style.backgroundImage = 'linear-gradient(#10054b, #099981)';
+        glow.style.boxShadow = 'rgb(145, 158, 185) 0 0 90px 50px';
+    } else {
+        main.style.backgroundImage = 'linear-gradient(#1a70c0, #099981 60%)';
+        glow.style.boxShadow = 'rgb(255, 255, 255) 0 0 90px 50px';
+    }
 
     const checkingWeather = await body;
     const weatherData = checkingWeather.forecast.forecastday;
@@ -45,9 +61,11 @@ const serverWork = async () => {
 
     blah(weatherData);
 
-    const revealDetailsHandler = () => {
+    revealDetailsHandler = () => {
         detailedBlah(actualDetails);
+        actualInfo.removeEventListener('click',revealDetailsHandler);
     }
+
     actualInfo.addEventListener('click', revealDetailsHandler);
 };
 
@@ -69,15 +87,19 @@ function blah(arr) {
         const nextDaysImgs = Object.assign(document.createElement('img'), {className :'mini-imgs'});
         const nextDays = Object.assign(document.createElement('div'), {className :'future-weather'});
 
+
         nextDaysTempDay.textContent = element.day.maxtemp_c + '°C';
         nextDaysTempNight.textContent = element.day.mintemp_c + '°C';
         nextDaysDay.textContent = days[futureDay];
         nextDaysImgs.src = element.day.condition.icon;
         nextDays.append(nextDaysImgs, nextDaysDay, nextDaysTempDay, nextDaysTempNight);
-        forecast.append(nextDays);        
+        forecast.append(nextDays);
+
     });
 }
+
 function detailedBlah (arr){
+
     const additionalInfo = Object.assign(document.createElement('div'), {className : 'add-info'});
     const feelsLike = Object.assign(document.createElement('div'), {className : 'feels-like'});
     const clouds = Object.assign(document.createElement('div'), {className : 'clouds'});
@@ -87,7 +109,6 @@ function detailedBlah (arr){
     const precipitation = Object.assign(document.createElement('div'), {className : 'precipitation'});
     const uv = Object.assign(document.createElement('div'), {className : 'uv'});
 
-
     feelsLike.textContent = 'Feels like: ' + arr.feelslike_c;
     clouds.textContent = 'Cloud: ' + arr.cloud;
     wind.textContent = 'Wind speed: ' + arr.wind_kph;
@@ -96,9 +117,11 @@ function detailedBlah (arr){
     precipitation.textContent = 'Precipitation: ' + arr.precip_in;
     uv.textContent = 'UV level: ' + arr.uv;
     
-    
     additionalInfo.append(feelsLike, clouds, wind, pressure, humidity, precipitation, uv);
-    additionalInfo.addEventListener('click', function() {this.remove();});
+    additionalInfo.addEventListener('click', function() {
+        this.remove();
+        actualInfo.addEventListener('click', revealDetailsHandler);
+    });
     bulk.append(additionalInfo);
 }
 
@@ -115,12 +138,15 @@ const timeAndDate = (locationTime) => {
     const date = new Date(locationTime.location.localtime).getDay();
     time.textContent = days[date];
 }
+
 const city = (city) => {
     locations.textContent = city.location.name;
 }
+
 const weather = (weather) => {
     weatherDescription.textContent = weather.current.condition.text;
 }
+
 const temp = (temp) => {
     tempInfo.textContent = temp.current.temp_c + '°C';
 }
@@ -128,7 +154,9 @@ const icon = (icon) => {
     let currentUrl = String(icon.current.condition.icon);
     let newUrl = currentUrl.replace(/64/g, '128');
     img.src = newUrl;
+    glowBox.append(glow);
 }
+
 const date = () => {
     const months = [
         'January',
@@ -142,7 +170,7 @@ const date = () => {
         'September',
         'November',
         'December',
-    ]
+    ];
 
     const dayDate = new Date().getDay();
     const monthDate = new Date().getMonth();
