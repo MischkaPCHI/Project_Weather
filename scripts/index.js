@@ -1,24 +1,22 @@
-const nextDays = document.querySelector('.future-weather');
-const forecast = document.querySelector('.future-info')
+const cityInput = document.querySelector('input');
+const searchButton = document.querySelector('button');
+const bulk = document.querySelector('.bulk-info');
+const actualInfo = document.querySelector('.acc-info')
 const time = document.querySelector('.main-date');
 const actualDate = document.querySelector('#date');
 const img = document.querySelector('img');
-const weatherDescription = document.querySelector('.weather-description');
 const locations = document.querySelector('.location');
+const weatherDescription = document.querySelector('.weather-description');
 const tempInfo = document.querySelector('.temperature');
-
-
-const cityInput = document.querySelector('input');
-const searchButton = document.querySelector('button');
+const forecast = document.querySelector('.future-info')
+const nextDays = document.querySelector('.future-weather');
 
 let cityID;
 
 const inputField = (event) => {
     cityID = event.target.value;
 }
-
 const searchButtonHandler = (event) => {
-    console.log(cityID);
     event.preventDefault();
     if(!cityID || cityID === '') {
         alertSound.play();
@@ -30,13 +28,9 @@ const searchButtonHandler = (event) => {
     }
 }
 
-cityInput.addEventListener('input', inputField);
-searchButton.addEventListener("click", searchButtonHandler);
-
 const serverWork = async () => {
     const response = await fetch('http://api.weatherapi.com/v1/forecast.json?key=35850dacb6a54f5c8db102528240603&q=' + cityID + '&days=6&aqi=no&alerts=no');
     const body = await response.json();
-    console.log(body);
 
     timeAndDate(body);
     city(body);
@@ -45,13 +39,18 @@ const serverWork = async () => {
     icon(body);
     date();
 
-    const futureDays = await body;
-    const weatherData = futureDays.forecast.forecastday;
+    const checkingWeather = await body;
+    const weatherData = checkingWeather.forecast.forecastday;
+    const actualDetails = checkingWeather.current;
 
-    console.log(weatherData);
     blah(weatherData);
+
+    const revealDetailsHandler = () => {
+        detailedBlah(actualDetails);
+    }
+    actualInfo.addEventListener('click', revealDetailsHandler);
 };
-    
+
 function blah(arr) {
     const days = [
         'Mon',
@@ -62,8 +61,7 @@ function blah(arr) {
         'Sat',
         'Sun'
     ];
-    for (let element of arr) {
-        
+    arr.map(element => {
         const futureDay = (new Date(element.date)).getDay();
         const nextDaysDay = Object.assign(document.createElement('p'), {className : 'day'});
         const nextDaysTempNight = Object.assign(document.createElement('p'), {className: 'temp-night'});
@@ -77,7 +75,31 @@ function blah(arr) {
         nextDaysImgs.src = element.day.condition.icon;
         nextDays.append(nextDaysImgs, nextDaysDay, nextDaysTempDay, nextDaysTempNight);
         forecast.append(nextDays);        
-    };
+    });
+}
+function detailedBlah (arr){
+    const additionalInfo = Object.assign(document.createElement('div'), {className : 'add-info'});
+    const feelsLike = Object.assign(document.createElement('div'), {className : 'feels-like'});
+    const clouds = Object.assign(document.createElement('div'), {className : 'clouds'});
+    const wind = Object.assign(document.createElement('div'), {className : 'wind'});
+    const pressure = Object.assign(document.createElement('div'), {className : 'pressure'});
+    const humidity = Object.assign(document.createElement('div'), {className : 'humidity'});
+    const precipitation = Object.assign(document.createElement('div'), {className : 'precipitation'});
+    const uv = Object.assign(document.createElement('div'), {className : 'uv'});
+
+
+    feelsLike.textContent = 'Feels like: ' + arr.feelslike_c;
+    clouds.textContent = 'Cloud: ' + arr.cloud;
+    wind.textContent = 'Wind speed: ' + arr.wind_kph;
+    pressure.textContent = 'Pressure: ' + arr.pressure_in;
+    humidity.textContent = 'Humidity: ' + arr.humidity;
+    precipitation.textContent = 'Precipitation: ' + arr.precip_in;
+    uv.textContent = 'UV level: ' + arr.uv;
+    
+    
+    additionalInfo.append(feelsLike, clouds, wind, pressure, humidity, precipitation, uv);
+    additionalInfo.addEventListener('click', function() {this.remove();});
+    bulk.append(additionalInfo);
 }
 
 const timeAndDate = (locationTime) => {
@@ -93,25 +115,21 @@ const timeAndDate = (locationTime) => {
     const date = new Date(locationTime.location.localtime).getDay();
     time.textContent = days[date];
 }
-
 const city = (city) => {
     locations.textContent = city.location.name;
 }
-
 const weather = (weather) => {
     weatherDescription.textContent = weather.current.condition.text;
 }
-
 const temp = (temp) => {
     tempInfo.textContent = temp.current.temp_c + '°C';
 }
-
 const icon = (icon) => {
-    img.src = icon.current.condition.icon;
+    let currentUrl = String(icon.current.condition.icon);
+    let newUrl = currentUrl.replace(/64/g, '128');
+    img.src = newUrl;
 }
-
 const date = () => {
-
     const months = [
         'January',
         'February',
