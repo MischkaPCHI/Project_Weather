@@ -48,7 +48,7 @@ const serverWork = async () => {
     let actualTime = new Date(body.location.localtime).getHours();
     console.log(actualTime);
 
-    if (actualTime >= 18 && actualTime < 6) {
+    if (actualTime >= 18 || actualTime < 6) {
         main.style.backgroundImage = 'linear-gradient(#10054b, #099981)';
         glow.style.boxShadow = 'rgb(145, 158, 185) 0 0 90px 50px';
     } else {
