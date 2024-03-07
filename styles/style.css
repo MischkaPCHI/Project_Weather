@@ -15,7 +15,7 @@ main {
     align-items: center;
     overflow: auto;
 }
-/* @media screen and (min-width: 600px) {
+@media screen and (min-width: 600px) {
     body, html {
         margin: 0;
         padding: 0;
@@ -32,22 +32,53 @@ main {
         height: 715px;
         display: flex;
         flex-direction: column;
-        /* justify-content: space-between; */
-        /* align-items: center; */
+        
     }
-} */
-.bulk-info {
-    margin-top: 50px; /* Отступ сверху */
 }
-.main-date, .location, .weather-description , #date{
+.bulk-info {
+    margin-top: 50px; 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.acc-info, .add-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+}
+.main-date, .location, .weather-description, #date {
     text-align:center; 
 }
+.location {
+    font-size: 30px;
+}
 #main-img {
-    width : 100px; 
+    width : 150px; 
     height : auto ;
     display: block ;
     margin: auto ;
+    background-color: transparent;
+    align-self: center;
+    top: -9rem;
+    left:-1.5rem;
+    position:absolute; 
+    z-index: 2; 
 }
+.glow{
+    box-shadow: rgb(171, 187, 222) 0 0 90px 50px;
+    /* height:20px;
+    width: 50px; */
+    top:-5rem; 
+    left:2rem; 
+    position:absolute;
+  
+    z-index: 1;
+    background: rgba(187, 218, 13, 0.8);
+  }
+  .glow-box{
+    position:relative;
+  }
 .temperature {
     text-align: center;
     font-size: 50px;
@@ -70,11 +101,12 @@ main {
     margin: 20px 0;
     display: flex;
 }
-
 input {
+    color: white;
     border-radius: 5px;
+    border: solid 1px #021a31;
+    background-color: #013a7264;
 }
-
 button {
     height: 25px;
     width: 25px;
