@@ -62,7 +62,7 @@ main {
     background-color: transparent;
     align-self: center;
     top: -10rem;
-    left:-1rem;
+    left:-0.2rem;
     position:absolute; 
     z-index: 2; 
 }
